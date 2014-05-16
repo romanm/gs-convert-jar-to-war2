@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html ng-app="ngAppDemo">
+<body>
+	<div ng-controller="ngAppDemoController">I can add: {{a}} + {{b}}
+		= {{ a+b }}</div>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script type="text/javascript">
+	angular.module('ngAppDemo', []).controller('ngAppDemoController', function($scope) {
+	$scope.a = 1;
+	$scope.b = 2;
+	});
+	</script>
+</body>
+</html>

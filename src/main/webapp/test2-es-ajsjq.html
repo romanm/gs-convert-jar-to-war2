@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html ng-app="test2ajsjqApp">
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="/webjars/bootstrap/3.0.3/css/bootstrap.css"/>
+	<link rel="stylesheet" href="/css/test2-es-ajsjq.html.css"/>
+	<style type="text/css">
+nav { width: 25%; }
+section { left: 25.2%; }
+	</style>
+</head>
+<body>
+	<header>
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">web7gradle</a>
+					<a class="navbar-brand" href="#"> <b> Test ES AJS JQ </b> </a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a ng-click="showPreferencesPanel()" >E-Setting</a></li>
+						<li><a ng-click="showDialog()">showDialog</a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="/dir">Dir</a></li>
+								<li class="divider"></li>
+								<li class="dropdown-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- 
+	<section ng-controller="HeaderCtrl" style="left: {{navWidth}}.2%;">
+	 -->
+	<section ng-controller="HeaderCtrl">
+		<ul class="nav nav-tabs" on-tabs-init>
+			<li><a data-toggle="tab" index="1" href="#filesTab"><i
+					class="glyphicon glyphicon-folder-open"></i>&nbsp &nbsp Files</a></li>
+			<li><a data-toggle="tab" index="2" href="#sessionsTab"><i
+					class="glyphicon glyphicon-transfer"></i>&nbsp &nbsp Sessions</a></li>
+			<li><a data-toggle="tab" index="3" href="#jobsTab"><i
+					class="glyphicon glyphicon-tasks"></i>&nbsp &nbsp Jobs</a></li>
+			<li><a data-toggle="tab" index="4" href="#monitoringTab"><i
+					class="glyphicon glyphicon-stats"></i>&nbsp &nbsp Monitoring</a></li>
+		</ul>
+		section
+		<div>
+			{{navWidth}}
+		</div>
+		<span>
+		test2-es-ajsjq.html
+		</span>
+	</section>
+	<nav>
+			<div class="btn-group">
+				<button type="button" id="createProjectButton"
+					class="btn btn-default project-toolbox-btn"
+					ng-click="executeCreateAction('Project')">
+					<span class="glyphicon glyphicon-plus-sign"></span>&nbspProject
+				</button>
+				<button type="button" id="createRunButton"
+					class="btn btn-default project-toolbox-btn"
+					ng-click="executeCreateAction('Run')">
+					<span class="glyphicon glyphicon-plus-sign"></span>&nbspRun
+				</button>
+				<button type="button" id="createFolderButton"
+					class="btn btn-default project-toolbox-btn"
+					ng-click="executeCreateAction('Folder')">
+					<span class="glyphicon glyphicon-plus-sign"></span>&nbspFolder
+				</button>
+				<button type="button" id="uploadFilesButton"
+					class="btn btn-default project-toolbox-btn"
+					ng-click="uploadFilesShow()">
+					<span class="glyphicon glyphicon-upload"></span>&nbspUpload
+				</button>
+			</div>
+	</nav>
+	<footer>
+		<div class="container">
+			<div class="col-md-2">
+				<p class="text-muted">© 2014 Company</p>
+			</div>
+			<div class="col-md-10">
+				<p class="text-muted">Place sticky footer content here.</p>
+			</div>
+		</div>
+	</footer>
+	<script src="/webjars/jquery/2.1.0/jquery.js"></script>
+	<script src="/webjars/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<!-- 
+	<script src="/webjars/jquery-ui/1.10.3/ui/jquery-ui.js"></script>
+	 -->
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script src="/js/test2-es-ajsjq.html.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html ng-app="phonecatApp">
+<head>
+	<meta charset="utf-8" />
+</head>
+<body ng-controller="PhoneListCtrl">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<!--Sidebar content-->
+				Search: <input ng-model="query">
+			</div>
+			<div class="col-md-10">
+				<!--Body content-->
+				<ul class="phones">
+					<li ng-repeat="phone in phones | filter:query">
+						{{phone.name}}
+						<p>{{phone.snippet}}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<p>
+	See
+	<a href="https://docs.angularjs.org/tutorial/step_03">
+	https://docs.angularjs.org/tutorial/step_03</a>
+	</p>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script type="text/javascript">
+	var phonecatApp = angular.module('phonecatApp', []);
+
+	phonecatApp.controller('PhoneListCtrl',['$scope', function ($scope) {
+	  $scope.phones = [
+	    {'name': 'Nexus S',
+	     'snippet': 'Fast just got faster with Nexus S.'},
+	    {'name': 'Motorola XOOM™ with Wi-Fi',
+	     'snippet': 'The Next, Next Generation tablet.'},
+	    {'name': 'MOTOROLA XOOM™',
+	     'snippet': 'The Next, Next Generation tablet.'}
+	  ];
+	}]);
+	</script>
+</body>
+</html>

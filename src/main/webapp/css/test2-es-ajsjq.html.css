@@ -1,0 +1,32 @@
+footer,nav,section{
+	display: block;
+    position: absolute;
+}
+nav,section{
+    top: 53px;
+    bottom: 30px;
+}
+nav{
+    border-right: 1px solid #333333;
+    left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+section{
+    border-left: 1px solid #333333;
+    min-width: 640px;
+    min-height: 480px;
+    right: 0;
+}
+footer{
+    background-color: #333333;
+    bottom: 0;
+    color: #FFFFFF;
+    height: 30px;
+    left: 0;
+    padding-top: 4px;
+    width: 100%;
+    /*
+    text-align: center;
+    */
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="http://cdn.kendostatic.com/2011.3.1129/styles/kendo.common.min.css" />
+<link rel="stylesheet" href="http://cdn.kendostatic.com/2011.3.1129/styles/kendo.default.min.css" />
+<style type="text/css">
+	html,body{height:100%;margin:0;padding:0;overflow:hidden}
+	#vertical{height:100%;border-width:0;}
+	#horizontal{width:100%;height:100%;}
+</style>
+</head>
+<body>
+	<div id="vertical">
+		<div>
+			<p>Outer splitter : top pane (resizable and collapsible)</p>
+		</div>
+		<div>
+			<div id="horizontal" style="height: 100%; width: 100%;">
+				<div>
+					<p>Inner splitter :: left pane</p>
+				</div>
+				<div>
+					<div id="tabstrip">
+						<ul>
+							<li class="k-state-active">one</li>
+							<li>two</li>
+						</ul>
+						<div>Tab 1</div>
+						<div>Tab 2</div>
+					</div>
+
+				</div>
+				<div>
+					<p>Inner splitter :: right pane</p>
+				</div>
+			</div>
+		</div>
+		<div>
+			<p>Outer splitter : bottom pane (non-resizable, non-collapsible)
+			</p>
+		</div>
+	</div>
+
+	<script src="/webjars/jquery/2.1.0/jquery.js"></script>
+	<script src="http://cdn.kendostatic.com/2011.3.1129/js/kendo.all.min.js"></script>
+	<script src="http://cdn.kendostatic.com/2011.3.1129/js/kendo.all.min.js"></script>
+	<script type="text/javascript">
+	function resizeTabs() {
+	    var paneHeight = $("#tabstrip").closest(".k-pane").innerHeight();
+	    var tabsHeight = $("#tabstrip > .k-tabstrip-items").outerHeight();
+	    $("#tabstrip > div").height(paneHeight - tabsHeight - 18);
+	}
+
+	$("#vertical").kendoSplitter({
+	    orientation: "vertical",
+	    panes: [
+	        { collapsible: true, size: "60px" },
+	        { collapsible: false },
+	        { collapsible: false, resizable: false, size: "10%" }
+	    ]
+	});
+
+	$("#horizontal").kendoSplitter({
+	    panes: [
+	        { collapsible: true, size: "100px" },
+	        { collapsible: false },
+	        { collapsible: true, size: "20%" }
+	    ],
+	    resize: resizeTabs
+	});
+
+	$("#tabstrip").kendoTabStrip();
+
+	resizeTabs();
+	</script>
+</body>
+</html>
