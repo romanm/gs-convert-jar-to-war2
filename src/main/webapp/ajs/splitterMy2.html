@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html ng-app="splitter1App">
+<head>
+	<meta charset="utf-8" />
+	<title>Splitter my 2: jQ</title>
+	<style type="text/css">
+body { padding: 6px; } 
+#toolsPanel { position: absolute; top: 50px; left: 5px; }
+#workplaceSplitter {
+	position: absolute; top: 50px; left: 350px; width: 7px; bottom: 50px;
+	border-width: 0 1px 0 0px; border-style: solid;
+	border-color: #BBBBBB; background-color: #F7F7F9;
+	cursor: w-resize;
+}
+#contextPanel{ position: absolute; top: 50px; left: 357px; }
+	</style>
+</head>
+<body>
+	<nav id="toolsPanel">
+		toolsPanel
+	</nav>
+	<div id="workplaceSplitter"></div>
+	<section id="contextPanel">
+		contextPanel
+	</section>
+	<script src="/js/jquery-1.9.1.js"></script>
+	<script>
+$(document).on('ready', function(){
+	$('#workplaceSplitter').on('mousedown', function(e){
+		$(this).on('mousemove', function(e){
+			moveSplitter(e);
+		});
+	}).on('mouseup', function(){
+		$(this).off('mousemove');
+	});
+});
+function moveSplitter(e){
+	console.log($(e));
+	console.log(e.screenX+"x"+e.screenY);
+}
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html ng-app="splitter1App">
+<head>
+	<meta charset="utf-8" />
+	<title>Splitter my 1: {{query}}</title>
+	<style type="text/css">
+#workplaceSplitter {
+	position: absolute;
+	top: 50px;
+	left: 350px;
+	width: 7px;
+	bottom: 50px;
+	cursor: w-resize;
+	background-color: #F7F7F9;
+}
+
+#workplaceCollapseButton {
+	position: absolute;
+	top: 47%;
+	width: 7px;
+	height: 26px;
+	cursor: pointer;
+	background-image: url('splitter-leave-v.png');
+}
+
+#workplaceCollapseButton:hover {
+	background-image: url('splitter-hover-v.png');
+}
+
+#workplaceControl {
+	position: absolute;
+	top: 50px;
+	left: 357px;
+	right: 0px;
+	bottom: 50px;
+	overflow-x: auto;
+	border: solid #bbb;
+	border-width: 0px 0px 0px 1px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-color: white;
+}
+
+nav {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	width: 350px;
+	bottom: 50px;
+	overflow: hidden;
+	overflow-y: auto;
+	overflow-x: auto;
+	background-color: #fff;
+}
+
+#navigationControl {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	min-width: 350px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+</style>
+</head>
+<body>
+	Splitter my 1
+	<nav id="navigationPanel">
+		<div id="navigationControl">
+		navigationControl
+		</div>
+	</nav>
+	<div id="workplaceSplitter" data-left-control="#navigationPanel"
+		data-right-control="#workplaceControl" on-slider-move>
+		<div id="workplaceCollapseButton" data-left-control="#navigationPanel"
+			data-right-control="#workplaceControl"
+			data-slider-control="#workplaceSplitter" on-workplace-collapse-click></div>
+	</div>
+	<section id="workplaceControl">
+		workplaceControl
+	</section>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script src="/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript">
+		var splitter1App = angular.module('splitter1App', []);
+		var xMinPosition =200;
+		splitter1App.directive('onSliderMove', function ($rootScope) {
+			return function (scope, element, attrs) {
+				var isMoving = false,
+					xPosition = null,
+					$element = $(element),
+					$rightControl = $(attrs.rightControl),
+					$leftControl = $(attrs.leftControl);
+				
+				$element.mousedown(function(event) {
+					isMoving = true;
+					xPosition = event.pageX;
+					
+					$(document).on('mousemove.slider', MoveHandler);
+					$(document).on('mouseup.slider', UpHandler);
+				});
+
+				function MoveHandler(event) {
+					if(isMoving && !scope.isWorkplaceCollaped){
+						xPosition = event.pageX;
+						// Check if cursor still in HTML body box. 350 is a min-width of NAV panel.
+						if(xPosition < xMinPosition){
+							xPosition = xMinPosition
+						}
+						if(xPosition > (window.innerWidth - $element.width())){
+							xPosition = window.innerWidth - $element.width();
+						}
+						$rightControl.css("left", xPosition + $element.width());
+						$element.css("left", xPosition);
+						$leftControl.width(xPosition);
+					}
+				}
+
+				function UpHandler(event) {
+					isMoving = false;
+					$(document).off('mousemove.slider');
+					$(document).off('mouseup.slider');
+				}
+			}
+		});
+
+		splitter1App.directive('onWorkplaceCollapseClick', function($rootScope) {
+			return function(scope, element, attrs) {
+				console.log("hello splitter split");
+				console.log(attrs);
+				scope.isWorkplaceCollaped = false;
+				var xPosition = null, 
+					$element = $(element), 
+					$sliderControl = $(attrs.sliderControl), 
+					$rightControl = $(attrs.rightControl), 
+					$leftControl = $(attrs.leftControl);
+	
+				$element.on('click', function(event) {
+					console.log("DEVELOP-r onWorkplaceCollapseClick 2");
+					console.log(xPosition);
+					if (!scope.isWorkplaceCollaped) {
+						$element.css('transform', 'rotateY(180deg)');
+						xPosition = $rightControl.css("left");
+						$sliderControl.stop().animate({left : "0px"}, 200);
+						$rightControl.stop().animate({left : $sliderControl.width()}, 200);
+						$leftControl.stop().animate({width : "0px"}, 200);
+					} else {
+						$element.css('transform', 'rotateY(0deg)');
+						$sliderControl.stop().animate({left : xPosition}, 200);
+						$rightControl.stop().animate({left : parseInt(xPosition)+ $sliderControl.width()}, 200);
+						$leftControl.stop().animate({width : xPosition}, 200);
+					}
+					scope.isWorkplaceCollaped = !scope.isWorkplaceCollaped;
+				});
+			}
+		});
+	</script>
+
+</body>
+</html>

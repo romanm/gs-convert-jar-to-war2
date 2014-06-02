@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html ng-app="splitter3App">
+<head>
+	<meta charset="utf-8" />
+	<title>Splitter my 2: jQ</title>
+	<style type="text/css">
+body { padding: 6px; } 
+#toolsPanel { position: absolute; top: 50px; left: 5px; }
+#workplaceSplitter {
+	position: absolute; top: 50px; left: 350px; width: 7px; bottom: 50px;
+	border-width: 0 1px 0 0px; border-style: solid;
+	border-color: #BBBBBB; background-color: #F7F7F9;
+	cursor: w-resize;
+}
+#contextPanel{ position: absolute; top: 50px; left: 357px; }
+	</style>
+</head>
+<body>
+	<nav id="toolsPanel">
+		toolsPanel
+	</nav>
+	<div id="workplaceSplitter"  data-left-control="#toolsPanel"
+		data-right-control="#contextPanel" on-splitter-move></div>
+	<section id="contextPanel">
+		contextPanel
+	</section>
+	<script src="/js/jquery-1.9.1.js"></script>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script>
+		var splitter3App = angular.module('splitter3App', []);
+		splitter3App.directive('onSplitterMove', function () {
+			return function (scope, element, attrs) {
+				element.dblclick(function(event) {
+					console.log("dblclick");
+				});
+				element.mousedown(function(event) {
+					$(document).on('mousemove', MoveSplitterHandler);
+					$(document).on('mouseup', UpSplitterHandler);
+				});
+				function MoveSplitterHandler(event) {
+					$(attrs.leftControl).width(event.pageX);
+					element.css("left", event.pageX);
+					$(attrs.rightControl).css("left", event.pageX + element.width());
+				}
+				function UpSplitterHandler(event) {
+					$(document).off('mousemove');
+					$(document).off('mouseup');
+				}
+			}
+		});
+	</script>
+	
+</body>
+</html>
