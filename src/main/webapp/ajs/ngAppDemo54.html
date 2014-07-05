@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html ng-app="cuwyApp" ng-controller="PatientListCtrl">
+<head>
+	<meta charset="utf-8" />
+	 <title>Реанімація пошук патиента: {{query}}</title>
+	 <link href="/css/vendor/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<!--Sidebar content-->
+				Search: <input ng-model="query">
+			</div>
+			<div class="col-md-10">
+				<!--Body content-->
+				<ul class="patients">
+					<li ng-repeat="patient in patients | filter:query">
+						{{patient.name}}
+						<p>Дз: {{patient.diagnosis}}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<p>
+	See
+	<a href="https://docs.angularjs.org/tutorial/step_03">
+		https://docs.angularjs.org/tutorial/step_03</a>
+	</p>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script src="/ajs/patients54.js"></script>
+	<script type="text/javascript">
+	var cuwyApp = angular.module('cuwyApp', []);
+
+	cuwyApp.controller('PatientListCtrl',['$scope', function ($scope) {
+	  $scope.patients = patients;
+	}]);
+	</script>
+</body>
+</html>
