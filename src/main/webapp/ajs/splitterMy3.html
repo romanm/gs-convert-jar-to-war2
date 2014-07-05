@@ -2,53 +2,129 @@
 <html ng-app="splitter3App">
 <head>
 	<meta charset="utf-8" />
-	<title>Splitter my 2: jQ</title>
+	<title>Splitter my 3: jQ</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/3.0.3/css/bootstrap.css"/>
+	<!-- 
+	<link rel="stylesheet" href="/css/sticky-footer-navbar.css"/>
+	 -->
 	<style type="text/css">
 body { padding: 6px; } 
-#toolsPanel { position: absolute; top: 50px; left: 5px; }
-#workplaceSplitter {
-	position: absolute; top: 50px; left: 350px; width: 7px; bottom: 50px;
-	border-width: 0 1px 0 0px; border-style: solid;
-	border-color: #BBBBBB; background-color: #F7F7F9;
+#tools-panel { position: absolute; top: 30px; left: 5px; overflow: hidden; } 
+#splitter-tools-context {
+	position: absolute; top: 30px; left: 350px; width: 7px; bottom: 50px; margin-right: 5px;
+	border-width: 0 1px 0 0px; border-style: solid; border-color: #BBBBBB; background-color: #F7F7F9;
 	cursor: w-resize;
 }
-#contextPanel{ position: absolute; top: 50px; left: 357px; }
+#context-panel{ position: absolute; top: 30px; left: 357px; margin-left: 5px;}
+
+.splitter-vertical-button {
+	position: absolute; top: 47%; width: 7px; height: 26px;
+	background-image: url('/img/splitter-leave-v.png');
+	cursor: pointer;
+}
+
+.splitter-vertical-button:hover {
+	background-image: url('/img/splitter-hover-v.png');
+}
+
 	</style>
 </head>
 <body>
-	<nav id="toolsPanel">
-		toolsPanel
+	<div role="navigation" class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<a href="/" class="navbar-brand">web7gradle</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/">Home.. дім</a></li>
+						<li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="/dir">Dir</a></li>
+								<li class="divider"></li>
+								<li class="dropdown-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	<nav id="tools-panel">
+		<h2> tools-panel </h2>
+		tools-panel text
 	</nav>
-	<div id="workplaceSplitter"  data-left-control="#toolsPanel"
-		data-right-control="#contextPanel" on-splitter-move></div>
-	<section id="contextPanel">
-		contextPanel
+	<div id="splitter-tools-context" on-splitter-move
+		data-left-control="#tools-panel" data-right-control="#context-panel">
+		<div class="splitter-vertical-button" on-tools-collapse-click
+			data-left-control="#tools-panel" data-right-control="#context-panel"></div>
+	</div>
+	<section id="context-panel">
+		<h2> context-panel </h2>
+		<p>
+		Splitter between tools panel and context panel.
+		</p>
+		<p>
+		Understate mouse movie, doubleclick on all splitter lounge and click on icons. 
+		</p>
+		<p>
+		<b>TODO:</b>
+		 Movement of splitter make "manchmal" two views von splitter linie.  
+		</p>
 	</section>
 	<script src="/js/jquery-1.9.1.js"></script>
 	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
 	<script>
 		var splitter3App = angular.module('splitter3App', []);
+		function clickSplitterHandler(scope, element, attrs) {
+			if(element.css("left").replace("px","")>0){
+				element.css('transform', 'rotateY(180deg)');
+				//$(attrs.leftControl).stop().animate({width: "0px"}, 200);
+				element.stop().animate({left: "0px"}, 200);
+				$(attrs.rightControl).stop().animate({left: element.width()}, 200);
+			}
+			else{
+				element.css('transform', 'rotateX(0deg)');
+				//	$(attrs.leftControl).stop().animate({width: scope.leftPosition+"px"}, 200);
+				element.stop().animate({left: scope.leftPosition+"px"}, 200);
+				$(attrs.rightControl).stop().animate({left: (parseInt(scope.leftPosition) + element.width())+"px"}, 200);
+			}
+			scope.leftPosition = element.css("left").replace("px","");
+		}
+		splitter3App.directive('onToolsCollapseClick', function () {
+			return function (scope, element, attrs) {
+				scope.leftPosition = element.css("left").replace("px","");
+				element.on('click', function (event) {
+					clickSplitterHandler(scope, element.parent(), attrs);
+				});
+			}
+		});
 		splitter3App.directive('onSplitterMove', function () {
 			return function (scope, element, attrs) {
+				scope.leftPosition = element.css("left").replace("px","");
 				element.dblclick(function(event) {
-					console.log("dblclick");
+					clickSplitterHandler(scope, element, attrs);
 				});
 				element.mousedown(function(event) {
-					$(document).on('mousemove', MoveSplitterHandler);
-					$(document).on('mouseup', UpSplitterHandler);
+					$(document).on('mousemove.splitter', moveSplitterHandler);
+					$(document).on('mouseup.splitter', upSplitterHandler);
 				});
-				function MoveSplitterHandler(event) {
-					$(attrs.leftControl).width(event.pageX);
-					element.css("left", event.pageX);
-					$(attrs.rightControl).css("left", event.pageX + element.width());
+				function moveSplitterHandler(event) {
+					var leftPosition = event.pageX<0?0:event.pageX;
+					//$(attrs.leftControl).width(leftPosition);
+					element.css("left", leftPosition);
+					$(attrs.rightControl).css("left", leftPosition + element.width());
 				}
-				function UpSplitterHandler(event) {
-					$(document).off('mousemove');
-					$(document).off('mouseup');
+				function upSplitterHandler(event) {
+					$(document).off('mousemove.splitter');
+					$(document).off('mouseup.splitter');
 				}
 			}
 		});
 	</script>
-	
+
 </body>
 </html>
