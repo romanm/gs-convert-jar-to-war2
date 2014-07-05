@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html ng-app="splitter3App">
+<head>
+	<meta charset="utf-8" />
+	<title>Splitter my 4: aJS</title>
+	<style type="text/css">
+#navigationPanel{
+    position: absolute; top: 50px; left: 0;
+    overflow: hidden;
+}
+
+#workplaceSplitter{
+	position: absolute; top: 50px; left: 350px; width: 7px; bottom: 50px;
+	border-width: 0 1px 0 0px; border-style: solid;
+	border-color: #BBBBBB;
+	background-color: #F7F7F9;
+	cursor: w-resize;
+}
+
+#workplaceControl {
+	position: absolute; top: 50px; left: 357px;
+}
+
+#workplaceCollapseButton{
+	position: absolute;
+	top: 47%;
+	width:7px;
+	height:26px;
+	cursor: pointer;
+	background-image:url('/img/splitter-leave-v.png');
+}
+
+#workplaceCollapseButton:hover{
+	background-image:url('/img/splitter-hover-v.png');
+}
+
+	</style>
+</head>
+<body>
+	<nav id="navigationPanel">
+		toolsPanel
+	</nav>
+	<div id="workplaceSplitter" data-left-control="#navigationPanel" data-right-control="#workplaceControl" on-slider-move>	    	
+	    	<div id="workplaceCollapseButton" data-left-control="#navigationPanel" 
+	    	data-right-control="#workplaceControl" data-slider-control="#workplaceSplitter" on-workplace-collapse-click></div>
+	    </div>
+	<section id="workplaceControl">
+		contextPanel
+	</section>
+	<script src="/js/jquery-1.9.1.js"></script>
+	<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
+	<script>
+	var splitter3App = angular.module('splitter3App', []);
+
+	splitter3App.directive('onSliderMove', function ($rootScope) {
+		return function (scope, element, attrs) {
+			var isMoving = false
+			,	xPosition = null ;
+
+			element.mousedown(function(event) {
+				isMoving = true;
+				xPosition = event.pageX;
+
+				$(document).on('mousemove.slider', MoveHandler);
+				$(document).on('mouseup.slider', UpHandler);
+			});
+
+			function MoveHandler(event) {
+				if(isMoving && !scope.isWorkplaceCollaped){
+					xPosition = event.pageX;
+
+					// Check if cursor still in HTML body box. 350 is a min-width of NAV panel.
+					if(xPosition < 10){
+						xPosition = 10
+					}
+					if(xPosition > (window.innerWidth - element.width())){
+						xPosition = window.innerWidth - element.width();
+					}
+
+					$(attrs.rightControl).css("left", xPosition + element.width());
+					element.css("left", xPosition);
+					$(attrs.leftControl).width(xPosition);
+				}
+			}
+
+			function UpHandler(event) {
+				isMoving = false;
+				$(document).off('mousemove.slider');
+				$(document).off('mouseup.slider');
+			}
+		}
+	});
+
+	splitter3App.directive('onWorkplaceCollapseClick', function ($rootScope) {
+		return function (scope, element, attrs) {
+			scope.isWorkplaceCollaped = false;
+			var xPosition = null,
+			$element = $(element),
+			$sliderControl = $(attrs.sliderControl),
+			$rightControl = $(attrs.rightControl),
+			$leftControl = $(attrs.leftControl);
+
+			$element.mousedown(function(event) {
+				event.stopPropagation();
+				event.preventDefault()
+			});
+
+			$element.on('click', function (event) {
+				console.log("element.on click");
+				if(!scope.isWorkplaceCollaped){
+					$element.css('transform', 'rotateY(180deg)');
+					xPosition = $rightControl.css("left");
+					$sliderControl.stop().animate({left: "0px"}, 200);
+					$rightControl.stop().animate({left: $sliderControl.width()}, 200);
+					$leftControl.stop().animate({width: "0px"}, 200);
+				}
+				else{
+					$element.css('transform', 'rotateY(0deg)');
+					$sliderControl.stop().animate({left: xPosition}, 200);
+					$rightControl.stop().animate({left: parseInt(xPosition) + $sliderControl.width()}, 200);                	
+					$leftControl.stop().animate({width: xPosition}, 200);
+				}
+				scope.isWorkplaceCollaped = !scope.isWorkplaceCollaped;
+			});
+		}
+	});
+
+	</script>
+	
+</body>
+</html>
